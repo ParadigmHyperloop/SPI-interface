@@ -18,38 +18,43 @@ short combineValues(unsigned char upper, unsigned char lower){
 
 int main(){
    cout << "Starting EBB SPI ADC Example" << endl;
-   SPIDevice *busDevice = new SPIDevice(2,0); //Using second SPI bus (both loaded)
-   SPIDevice *busDeviceTwo = new SPIDevice(2,1); //Using second SPI bus (both loaded)
+   SPIDevice *busDevice = new SPIDevice(1,0); //Using second SPI bus (both loaded)
+   //SPIDevice *busDeviceTwo = new SPIDevice(2,1); //Using second SPI bus (both loaded)
    busDevice->setSpeed(2500);      // Have access to SPI Device object
    busDevice->setMode(SPIDevice::MODE2);
    busDevice->setBitsPerWord(16);
-
+	
+	/*
    busDeviceTwo->setSpeed(2500);      // Have access to SPI Device object
    busDeviceTwo->setMode(SPIDevice::MODE2);
    busDeviceTwo->setBitsPerWord(16);
-
+	*/
+	
    unsigned char send[2], receive[2];
    //send[0] = 0;          // This byte doesn't need to be set, just for a clear display
    //send[1] = 0;          // This byte doesn't need to be set, just for a clear display
-   send[0] = 0b10000000; // The Start Bit followed
-   send[1] = 0b00010001;
+   send[0] = 0b11000000; // The Start Bit followed
+   send[1] = 0b00011011;
 
    // Set the SGL/Diff and D mode -- e.g., 1000 means single ended CH0 value
-   busDeviceTwo->transfer(send, receive, 2);
-   busDeviceTwo->transfer(send, receive, 2);
+   //busDeviceTwo->transfer(send, receive, 2);
+   //busDeviceTwo->transfer(send, receive, 2);
    busDevice->transfer(send, receive, 2);
    busDevice->transfer(send, receive, 2);
    cout << "Response bytes are " << (int)receive[1] << "," << (int)receive[2] << endl;
    double lsb = 5/4096;
    for (int i = 0; i <= 1000; i++) {
      unsigned char send[2], recieve[2];
-     send[0] = 0b10000000; // The Start Bit followed
-     send[1] = 0b00010001;
+     send[0] = 0b11000000; // The Start Bit followed
+     send[1] = 0b00011011;
      busDevice->transfer(send, recieve, 2);
      int value = (((int) recieve[1] & 0b00001111)<<8)|(int)recieve[0];
      int channel = ((int) recieve[1] & 0b11110000) >>4;
      cout << "Channel: " << channel << " Value: " << value << endl;
+	 //usleep(1000000);
    }
+   
+   /*
    for (int i = 0; i <= 100; i++) {
      unsigned char send[2], recieve[2];
      send[0] = 0b00000000;
@@ -91,6 +96,7 @@ int main(){
      int channel = ((int) recieve[1] & 0b11110000)>>4;
      cout << "ADC2 -- Channel: " << channel << " Value: "<< value << endl;
    }
+   
    cout << "Infinite loop!" << endl;
    while (true) {
      unsigned char send[2], recieve[2];
@@ -100,5 +106,5 @@ int main(){
      int value = (((int) recieve[1] & 0b00001111)<<8)|(int)recieve[0];
      int channel = ((int) recieve[1] & 0b11110000)>>4;
      cout << "Channel: " << channel << " Value: "<<  value << endl;
-   }
+   }*/
 }
