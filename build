@@ -1,2 +1,4 @@
 #!/bin/bash
-g++ -o ADCExample ADCExample.cpp bus/SPIDevice.cpp bus/BusDevice.cpp
+g++ -o ADCMonitor ADCMonitor.cpp bus/SPIDevice.cpp bus/BusDevice.cpp
+g++ -o ADCTest ADCTest.cpp bus/SPIDevice.cpp bus/BusDevice.cpp
+g++ -o ADCSingle ADCSingle.cpp bus/SPIDevice.cpp bus/BusDevice.cpp
